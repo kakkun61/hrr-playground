@@ -1,0 +1,6 @@
+option batch on
+option exclude ".git/;.idea/;.stack-work/"
+open twitter-review
+synchronize remote -delete "C:\Users\kazuki\Programming\hrr-playground" "/home/kazuki/hrr-playground"
+keepuptodate -delete "C:\Users\kazuki\Programming\hrr-playground" "/home/kazuki/hrr-playground"
+exit
