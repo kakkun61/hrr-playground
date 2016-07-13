@@ -28,6 +28,8 @@ executable hrr-playground
                       , HDBC
                       , HDBC-mysql
                       , persistable-record
+                      , text
+                      , ghc
   hs-source-dirs:       src
   default-language:     Haskell2010
   ghc-options:          -Wall
