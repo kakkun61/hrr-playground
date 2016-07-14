@@ -1,6 +1,7 @@
 module Main where
 
 import Data.Int (Int32)
+import Database.HDBC (withTransaction)
 import Database.HDBC.Record (runQuery, runInsert)
 import Database.Relational.Query hiding (id')
 import Database.HDBC.MySQL
@@ -17,13 +18,17 @@ main = do
                                                  , mysqlUser = "root"
                                                  , mysqlPassword = ""
                                                  }
-    _ <- runInsert conn insertFruit' (Fruit' "Apple" 10)
-    _ <- runInsert conn insertFruit' (Fruit' "Banana" 11)
-    print selectHistory
-    result <- runQuery conn (relationalQuery selectHistory) ()
-    mapM_ print result
-    result2 <- runQuery conn (relationalQuery selectNothing) ()
-    print result2
+    withTransaction conn $ \conn -> do
+        _ <- runInsert conn insertFruit' (Fruit' "Apple" 10)
+        _ <- runInsert conn insertFruit' (Fruit' "Banana" 11)
+        print fruit
+        result0 <- runQuery conn (relationalQuery $ relation $ query fruit) ()
+        mapM_ print result0
+        print selectHistory
+        result <- runQuery conn (relationalQuery selectHistory) ()
+        mapM_ print result
+        result2 <- runQuery conn (relationalQuery selectNothing) ()
+        print result2
 
 selectHistory :: Relation () (Fruit, MarketHistory)
 selectHistory = relation $ do
